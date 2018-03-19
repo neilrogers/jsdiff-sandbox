@@ -1,0 +1,19 @@
+{
+  "name": "jsdiff-sandbox",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "deep-diff": "^0.3.8",
+    "express": "^4.16.3",
+    "fast-json-patch": "^2.0.6",
+    "jiff": "^0.7.3",
+    "json8-patch": "^0.4.1",
+    "pug": "^2.0.1"
+  }
+}

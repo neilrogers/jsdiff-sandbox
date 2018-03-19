@@ -1,0 +1,36 @@
+html
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width")
+    title Test Sandbox
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous")
+
+  body
+    div(class="container")
+        h2 JSON Patch Generation Sandbox
+        p Utility for creating and testing json patches.
+        form(action="/" method="post")
+
+            div(class="form-group")
+                label Select Diff Library
+                select(name="diffLibrary" id="diffLibrary" class="form-control")
+                    option(value="")
+                    for lib in libraries
+                        option(selected=lib === diffLibrary)= lib
+
+            div(class="form-group")
+                input(type="submit" name="go" value="Go" class="btn btn-primary")
+            
+
+            div(class="row")
+                div(class="form-group col-sm")
+                    label Left
+                    textarea(name="left" id="left" rows="8" class="form-control")= left
+                
+                div(class="form-group col-sm")
+                    label Right
+                    textarea(name="right" id="right" rows="8" class="form-control")= right
+
+            div(class="form-group")
+                label Result
+                textarea(name="diff" id="diff" rows="16" class="form-control")= result
