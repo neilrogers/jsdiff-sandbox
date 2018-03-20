@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require("fs");
 const bodyParser = require('body-parser');
+var Stopwatch = require("node-stopwatch").Stopwatch;
 
 const app = express();
 
@@ -37,16 +38,35 @@ function compare(library, left, right) {
     return diff;
 }
 
+function benchMark(loops, library, left, right) {
+    var stopwatch = Stopwatch.create();
+    stopwatch.start();
+    for (let i = 0; i <= loops ; i++) {
+        compare(library, left, right);
+    }
+    stopwatch.stop();
+
+    return stopwatch;
+    // console.log("ticks: " + stopwatch.elapsedTicks);
+    // console.log("milliseconds: " + stopwatch.elapsedMilliseconds);
+    // console.log("seconds: " + stopwatch.elapsed.seconds);
+    // console.log("minutes: " + stopwatch.elapsed.minutes);
+    // console.log("hours: " + stopwatch.elapsed.hours);
+}
+
 app.post('/', (req, res) => {
     let result = compare(req.body.diffLibrary, req.body.left, req.body.right);
     result = JSON.stringify(result, null, 2);
+
+    const bench = benchMark(1000, req.body.diffLibrary, req.body.left, req.body.right);
     
     let data = {
         left: fs.readFileSync("left.json"),
         right: fs.readFileSync("right.json"),
         result: result,
         diffLibrary: req.body.diffLibrary,
-        libraries: libraries
+        libraries: libraries,
+        bench: bench.elapsedMilliseconds
     };
     res.render('index', data);
 });
