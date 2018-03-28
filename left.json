@@ -1,10 +1,22 @@
-{
-    "complex": {
-        "progress": 0,
-        "element": "abc"
+[
+    {
+        "first": {
+            "progress": 10,
+            "id": "1",
+            "block": "block",
+            "task": "ABC",
+            "color": "red",
+            "lang": "ENG"
+        }
     },
-    "a": 1,
-    "b": "2",
-    "c": 3,
-    "x": 100
-}
+    {
+        "second": {
+            "progress": 10,
+            "id": "1",
+            "block": "block",
+            "task": "ABC",
+            "color": "red",
+            "lang": "ENG"
+        }
+    }
+]

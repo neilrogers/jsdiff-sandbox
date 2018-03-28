@@ -2,11 +2,12 @@
   "name": "jsdiff-sandbox",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "live-server server.js",
   "scripts": {},
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "benchmark": "^2.1.4",
     "body-parser": "^1.18.2",
     "deep-diff": "^0.3.8",
     "express": "^4.16.3",

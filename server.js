@@ -1,17 +1,16 @@
 const express = require('express');
 const fs = require("fs");
 const bodyParser = require('body-parser');
-var Stopwatch = require("node-stopwatch").Stopwatch;
+const Benchmark = require('benchmark');
 
 const app = express();
 
 app.set('view engine', 'pug');
-//app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
 
 const libraries = ["json8", "fast-json-patch", "jiff", "deep-diff"];
 
-function compare(library, left, right) {
+function genPatch(library, left, right) {
     left = JSON.parse(left);
     right = JSON.parse(right);
 
@@ -38,35 +37,38 @@ function compare(library, left, right) {
     return diff;
 }
 
-function benchMark(loops, library, left, right) {
-    var stopwatch = Stopwatch.create();
-    stopwatch.start();
-    for (let i = 0; i <= loops ; i++) {
-        compare(library, left, right);
-    }
-    stopwatch.stop();
+function benchMark(library, left, right) {
+    const suite = new Benchmark.Suite;
 
-    return stopwatch;
-    // console.log("ticks: " + stopwatch.elapsedTicks);
-    // console.log("milliseconds: " + stopwatch.elapsedMilliseconds);
-    // console.log("seconds: " + stopwatch.elapsed.seconds);
-    // console.log("minutes: " + stopwatch.elapsed.minutes);
-    // console.log("hours: " + stopwatch.elapsed.hours);
+    for (let i in libraries) {
+        suite.add(libraries[i], function () {
+            return genPatch(libraries[i], left, right);
+        });
+    }
+    suite.on('cycle', function (event) {
+        console.log(String(event.target));
+    });
+
+    suite.on('complete', function () {
+        console.log('Fastest is ' + this.filter('fastest').map('name'));
+    })
+
+    suite.run({ 'async': false });
+
 }
 
 app.post('/', (req, res) => {
-    let result = compare(req.body.diffLibrary, req.body.left, req.body.right);
+    let result = genPatch(req.body.diffLibrary, req.body.left, req.body.right);
     result = JSON.stringify(result, null, 2);
 
-    const bench = benchMark(1000, req.body.diffLibrary, req.body.left, req.body.right);
+    //const bench = benchMark(req.body.diffLibrary, req.body.left, req.body.right);
     
     let data = {
-        left: fs.readFileSync("left.json"),
-        right: fs.readFileSync("right.json"),
+        left: req.body.left,
+        right: req.body.right,
         result: result,
         diffLibrary: req.body.diffLibrary,
-        libraries: libraries,
-        bench: bench.elapsedMilliseconds
+        libraries: libraries
     };
     res.render('index', data);
 });
