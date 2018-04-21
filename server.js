@@ -1,6 +1,5 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const jsdiff = require('./jsdiff.js');
 const indexRoute = require('./routes/index.js');
 
 const app = express();

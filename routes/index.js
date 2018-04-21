@@ -1,3 +1,4 @@
+const jsdiff = require(__dirname+'/../jsdiff.js');
 const fs = require("fs");
 const libraries = ["json8", "fast-json-patch", "jiff", "deep-diff"];
 
@@ -14,8 +15,8 @@ class route {
     }
 
     post(req, res) {
-        const jsdiff = new jsdifflibraries
-        let result = jsdiff.genPatch(req.body.diffLibrary, req.body.left, req.body.right);
+        const diff = new jsdiff(libraries);
+        let result = diff.genPatch(req.body.diffLibrary, req.body.left, req.body.right);
         result = JSON.stringify(result, null, 2);
 
         //const bench = benchMark(req.body.diffLibrary, req.body.left, req.body.right);
